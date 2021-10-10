@@ -1,0 +1,265 @@
+{% extends "tascaty/base.html" %}
+{% load static %}
+
+{% block datepickercss %}
+<link rel="stylesheet" href="{% static 'css/jquery-ui.min.css'%}" type="text/css" />
+{% endblock datepickercss %}
+
+{% block content %}
+{% if user.is_team_lead %} 
+<div class="wrapper">
+        <div class="box1"><h3>Enter Tasks</h3></div>
+        <div class="box2"><h3>Approved Tasks</h3></div>
+        <div class="box3">
+            <form method="POST">
+                {% csrf_token %}
+                {{ activity_form }}
+                <p></p>
+                <button type="submit" class="btn btn-primary bg-tascaty w-100">SUBMIT</button>
+            </form>
+        </div>
+        <div class="box box4">
+                {% if post_page_RA %}
+                <table class="table-mytask">
+    
+                    <thead class='postcol'>
+                        <tr>
+                            <th scope="col">Activity Name</th>
+                            <th scope="col">System Name</th>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Hours</th>
+                            <th scope="col">Mins</th>
+                            <th scope="col">No Of Records</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Project ID</th>
+                            <th scope="col">Comments</th>
+                            <th scope="col">Status</th>
+                            {% if user.is_team_lead %}
+                            <th scope="col">Action</th>
+                            {% endif %}
+    
+                        </tr>
+                    </thead>
+    
+                    {% for tasks in post_page_RA %}
+                    <tr>
+                        <td>{{ tasks.activity_name }}</td>
+                        <td>{{ tasks.system_name }}</td>
+                        <td>{{ tasks.client_name }}</td>
+                        <td>{{ tasks.hours }}</td>
+                        <td>{{ tasks.mins }}</td>
+                        <td>{{ tasks.no_of_records }}</td>
+                        <td>{{ tasks.date }}</td>
+                        <td>{{ tasks.project_id }}</td>
+                        <td>{{ tasks.user_comments }}</td>
+                        <td>{{ tasks.status }}</td>
+                        {% if user.is_team_lead %}
+                        <td><a class="btn btn-danger" href="{% url 'deleteview' tasks.id %}" type="submit">Delete</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+    
+                </table>
+                {% endif %}
+                <br>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-sm justify-content-center"><!-- Paginator Approved tasks start -->
+    
+                        {% if post_page_RA.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                        <li class="page-item"><a class="page-link"
+                                href="?page={{ post_page_RA.previous_page_number }}">previous</a></li>
+                        {% endif %}
+                        {% for num in post_page_RA.paginator.page_range %}
+                        <!-- <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li> -->
+                        {% if forloop.counter < 10 %} <!-- restrict paginator page to 10 pages -->
+                            <li class="page-item"><a a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if post_page_RA.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ post_page_RA.next_page_number }}">next</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="?page={{ post_page_RA.paginator.num_pages }}">last
+                                &raquo;</a></li>
+                        {% endif %}
+                    </ul><!-- Paginator Approved tasks end -->
+                </nav>
+        </div>
+    </div>
+    
+{% else %}
+<div class="wrapper">
+    <div class="box1"><h3>Enter Tasks</h3></div>
+    <div class="box2"><h3>Pending Tasks</h3></div>
+    <div class="box3">
+        <form method="POST">
+            {% csrf_token %}
+            {{ activity_form }}
+            <p></p>
+            <button type="submit" class="btn btn-primary bg-tascaty w-100">SUBMIT</button>
+        </form>
+    </div>
+    <div class="box box4">
+        {% if messages %} {% for message in messages %}
+        <div class="alert text-center bg-tascaty w-100 alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endif %}
+        {% if post_page_PA %}
+        <table class="table-mytask mt-2">
+            <thead>
+                <tr>
+                    <th scope="col">Activity Name</th>
+                    <th scope="col">System Name</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Hours</th>
+                    <th scope="col">Mins</th>
+                    <th scope="col">No Of Records</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Project ID</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+
+            {% for tasks in post_page_PA %}
+            <tr>
+                <td>{{ tasks.activity_name }}</td>
+                <td>{{ tasks.system_name }}</td>
+                <td>{{ tasks.client_name }}</td>
+                <td>{{ tasks.hours }}</td>
+                <td>{{ tasks.mins }}</td>
+                <td>{{ tasks.no_of_records }}</td>
+                <td>{{ tasks.date }}</td>
+                <td>{{ tasks.project_id }}</td>
+                <td>{{ tasks.user_comments }}</td>
+                <td>{{ tasks.status }}</td>
+                <td><a class="btn btn-primary bg-tascaty" href="{% url 'updateview' tasks.id %}">Update</a></td>
+
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h4><strong>No Pending Approvals</strong></h4>
+        {% endif %}
+        
+        <br>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pagination-sm justify-content-center"><!-- Paginator pending tasks start -->
+
+                {% if post_page_PA.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ post_page_PA.previous_page_number }}">previous</a></li>
+                {% endif %}
+                {% for num in post_page_PA.paginator.page_range %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if post_page_PA.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ post_page_PA.next_page_number }}">next</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="?page={{ post_page_PA.paginator.num_pages }}">last
+                        &raquo;</a></li>
+                {% endif %}
+            </ul><!-- Paginator pending tasks end -->
+        </nav>
+    </div>
+</div>
+
+<div class="box5">
+    <h3>Approved Tasks</h3>
+</div>
+        <div class="box6">
+            {% if post_page_RA %}
+            <table class="table-mytask">
+
+                <thead class='postcol'>
+                    <tr>
+                        <th scope="col">Activity Name</th>
+                        <th scope="col">System Name</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Hours</th>
+                        <th scope="col">Mins</th>
+                        <th scope="col">No Of Records</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Project ID</th>
+                        <th scope="col">Comments</th>
+                        <th scope="col">Status</th>
+                        {% if user.is_team_lead %}
+                        <th scope="col">Action</th>
+                        {% endif %}
+
+                    </tr>
+                </thead>
+
+                {% for tasks in post_page_RA %}
+                <tr>
+                    <td>{{ tasks.activity_name }}</td>
+                    <td>{{ tasks.system_name }}</td>
+                    <td>{{ tasks.client_name }}</td>
+                    <td>{{ tasks.hours }}</td>
+                    <td>{{ tasks.mins }}</td>
+                    <td>{{ tasks.no_of_records }}</td>
+                    <td>{{ tasks.date }}</td>
+                    <td>{{ tasks.project_id }}</td>
+                    <td>{{ tasks.user_comments }}</td>
+                    <td>{{ tasks.status }}</td>
+                    {% if user.is_team_lead %}
+                    <td><a class="btn btn-danger" href="{% url 'deleteview' tasks.id %}" type="submit">Delete</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+            </table>
+            {% endif %}
+            <br>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-sm justify-content-center"> <!-- Paginator Approved tasks start -->
+
+                    {% if post_page_RA.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+                    <li class="page-item"><a class="page-link"
+                            href="?page={{ post_page_RA.previous_page_number }}">previous</a></li>
+                    {% endif %}
+                    {% for num in post_page_RA.paginator.page_range %}
+                    <!-- <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li> -->
+                    {% if forloop.counter < 10 %} <!-- restrict paginator page to 10 pages -->
+                        <li class="page-item"><a a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if post_page_RA.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ post_page_RA.next_page_number }}">next</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="?page={{ post_page_RA.paginator.num_pages }}">last
+                            &raquo;</a></li>
+                    {% endif %}
+                </ul><!-- Paginator Approved tasks ends -->
+            </nav>
+        </div>
+
+{% endif %}
+
+{% endblock content %}
+
+{% block datepickerjs %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script>
+    var today = new Date();
+    $("#datepicker").datepicker({
+        endDate: "today",
+        maxDate: today
+    });
+</script>
+<script>
+    var today = new Date();
+    $("#datepicker2").datepicker({
+        endDate: "today",
+        maxDate: today
+    });
+</script>
+
+<script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+{% endblock datepickerjs %}

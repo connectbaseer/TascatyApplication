@@ -1,0 +1,5 @@
+*.pyc
+migrations/
+bin/
+lib/
+pyvenv.cfg

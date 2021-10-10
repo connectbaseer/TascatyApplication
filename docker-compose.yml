@@ -1,0 +1,47 @@
+version: '3'                                         
+services:                                             
+    mariadb:                                       
+        image: mariadb                                
+        env_file:                                
+            - .env
+        ports:
+            - "3307:3306"
+        volumes: 
+            - tascatyDbD:/var/lib/mysql                           
+    tascaty:                                         
+        image: abdul8423/tascaty_wsgi:latest                                  
+        env_file:
+            - .env
+        ports:
+            - "8012:8000"
+        volumes:
+            - tascatySD:/apps/tascaty/static
+            - tascatyAD1:/apps/tascaty/users/migrations
+            - tascatyAD2:/apps/tascaty/tascaty/migrations
+            - tascatyAD3:/apps/tascaty/leaves/migrations
+            - tascatyAD4:/apps/tascaty/blog/migrations
+        depends_on: 
+            - mariadb
+    nginx:
+        image: abdul8423/tascaty_nginx
+        ports:
+            - "8013:8080"
+        volumes:
+            - tascatySD:/apps/tascaty/static
+        depends_on: 
+            - mariadb
+            - tascaty
+volumes:
+    tascatySD:
+        driver: local
+    tascatyAD1:
+        driver: local
+    tascatyAD2:
+        driver: local
+    tascatyAD3:
+        driver: local
+    tascatyAD4:
+        driver: local
+    tascatyDbD:
+        driver: local
+        

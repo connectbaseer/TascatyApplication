@@ -1,0 +1,52 @@
+{% extends "tascaty/base.html" %}
+
+{% block content %}
+
+<div class="container_mytask p-5 ">
+
+    <div class="form-group">
+        <form method="POST">
+            {% csrf_token %}
+            <h3>Are You Sure, You Want To Delete The Below Activity </h3>
+            <button class="btn btn-danger" type="submit">Yes, Delete</button>
+            <a class="btn btn-secondary" href="{% url 'mytask' %}" type="submit">Cancel</a>
+
+            <p></p>
+            <table class="table-mytask">
+
+                <thead class='postcol'>
+                    <tr>
+                        <th scope="col">Activity Name</th>
+                        <th scope="col">System Name</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Hours</th>
+                        <th scope="col">Mins</th>
+                        <th scope="col">No Of Records</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Comments</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+
+
+                <tr>
+                    <td>{{ object.activity_name }}</td>
+                    <td>{{ object.system_name }}</td>
+                    <td>{{ object.client_name }}</td>
+                    <td>{{ object.hours }}</td>
+                    <td>{{ object.mins }}</td>
+                    <td>{{ object.no_of_records }}</td>
+                    <td>{{ object.date }}</td>
+                    <td>{{ object.user_comments }}</td>
+                    <td>{{ object.status }}</td>
+
+                </tr>
+
+            </table>
+
+        </form>
+    </div>
+
+</div>
+
+{% endblock content %}

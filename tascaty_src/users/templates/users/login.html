@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+    <title>TasCaty|Login</title>
+    <link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/signin.css'%}" rel="stylesheet">
+</head>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<body>
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endif %}
+    
+    <form class="form-signin" method="POST">
+        {% csrf_token %}
+        <!--
+        <img class="mb-4" src="{% static 'tascaty_app/img/tascati-signin.png'%}" alt="" width="100" height="122">
+-->
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="sign-in-div">
+            <label for="inputEmail" class="sr-only">Username</label>
+            <label for="inputPassword" class="sr-only">Password</label>
+            {{ form }}
+            <button class="btn btn-lg btn-secondary btn-block" type="submit">Sign in</button>
+        </div>
+    </form>
+</body>
+<footer class="footer-copyright text-center fixed-bottom py-1">© 2019 Etisalat. All Rights Reserved </p>
+</footer>
+
+</html>

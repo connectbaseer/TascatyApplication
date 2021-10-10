@@ -1,0 +1,44 @@
+{% extends "tascaty/base.html" %}
+{% load static %}
+{% block content %}
+<br>
+<br>
+<div class="container_mytask p-2 ">
+    <legend class="mytask_legend">Leave Planner</legend>
+    <p></p>
+    <div class="form-inline justify-content-center">
+
+        <form class="form-inline" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn btn-md btn-secondary" type="submit">Submit</button>
+
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block script %} 
+</script>
+<script src="{% static 'js/jquery.min.js' %}"></script><!-- added for datepicker-->
+<script src="{% static 'js/jquery-ui.min.js' %}"></script><!-- added for datepicker-->
+<script><!-- added for datepicker-->
+    var today = new Date();
+    $("#datepicker").datepicker({
+        endDate: "today",
+        maxDate: today
+    });
+</script>
+<script><!-- added for datepicker-->
+    var today = new Date();
+    $("#datepicker2").datepicker({
+        endDate: "today",
+        maxDate: today
+    });
+</script>
+
+<script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+{% endblock script %}

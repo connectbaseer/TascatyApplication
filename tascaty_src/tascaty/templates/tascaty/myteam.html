@@ -1,0 +1,145 @@
+{% extends "tascaty/base.html" %}
+{% block content %}
+
+
+<div class="box5">
+    <h3>Pending Approval</h3>
+</div>
+    <div class="box6">
+        {% if MyTeamActivity%}
+        <table class="table-mytask">
+
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Activity Name</th>
+                    <th scope="col">System Name</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Hours</th>
+                    <th scope="col">Mins</th>
+                    <th scope="col">No Of Records</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Project ID</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Reverify</th>
+                    <th scope="col">
+                        <input style="margin:2px; vertical-align: middle;" type="checkbox" id="approveAll" 
+                        onclick='for(var i=0;i<1000;i++) { try {var currStatus=document.forms["pendingTasksForm_"+i].status; /* if checked then copy existing statuses */if(this.checked) {currStatus.status= currStatus.value; currStatus.value = 3;  } else {/* if unchecked then restore only*/ currStatus.value = currStatus.status==""?2:currStatus.status;} } catch(e) {break;}}'></input>&nbsp;Approve
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tasks in MyTeamActivity %}
+                <tr>
+                    <form name="pendingTasksForm_{{ forloop.counter0 }}" action="" method="POST">
+                        {% csrf_token %}
+                        <td><input type="hidden" name="id" value="{{ tasks.id }}" readonly></td>
+                        <td>{{ tasks.activity_name }}</td>
+                        <td>{{ tasks.system_name }}</td>
+                        <td>{{ tasks.client_name }}</td>
+                        <td>{{ tasks.hours }}</td>
+                        <td>{{ tasks.mins }}</td>
+                        <td>{{ tasks.no_of_records }}</td>
+                        <td>{{ tasks.date }}</td>
+                        <td>{{ tasks.project_id }}</td>
+                        <td>{{ tasks.user_comments }}</td>
+                        <td>{{ tasks.status }}</td>
+                        <td>{{ tasks.user_name }}</td>
+                        <td><input type="radio" name="status" value="2" required onchange="document.getElementById('approveAll').checked=false;"></td>
+                        <td><input type="radio" name="status" value="3"></td>
+                        <td><button type="submit" class="btn btn-success bg-tascaty bcol">SUBMIT</button></td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <script>
+            
+            function submitForms(form) {
+                var dataObject = $(form).serialize();
+                $.ajax({
+                url: window.location.href,
+                data : dataObject,
+                type : "POST",
+                success: function(){
+                    $(form).submit();   //assuming id of second form  is form2
+                }
+                });
+                return false;   //to prevent submit
+            }    
+
+        </script>
+
+
+
+        <button type="button" onclick='for(var i=0;i<1000;i++) {try { if(document.forms["pendingTasksForm_"+i].status.value==3)  {submitForms(document.forms["pendingTasksForm_"+i]); } }catch(e) {break; }  } document.getElementById("approveAll").checked=false' class="btn btn-success bg-tascaty bcol">SUBMIT ALL</button>
+        {% else %}
+        <h4><strong>No Pending Approvals</strong></h4>
+        {% endif %}
+    </div>
+<div class="box5">
+    <h3>Approved Tasks</h3>
+</div>
+
+<div class="box6">
+    {% if TeamActivityList %}
+    <table class="table-mytask">
+
+        <thead class='postcol'>
+            <tr>
+                <th scope="col">UserName</th>
+                <th scope="col">Activity Name</th>
+                <th scope="col">System Name</th>
+                <th scope="col">Client Name</th>
+                <th scope="col">Hours</th>
+                <th scope="col">Mins</th>
+                <th scope="col">No Of Records</th>
+                <th scope="col">Date</th>
+                <th scope="col">Project ID</th>
+                <th scope="col">Comments</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+
+        {% for tasks in TeamActivityList %}
+        <tr>
+            <td>{{ tasks.user_name }}</td>
+            <td>{{ tasks.activity_name }}</td>
+            <td>{{ tasks.system_name }}</td>
+            <td>{{ tasks.client_name }}</td>
+            <td>{{ tasks.hours }}</td>
+            <td>{{ tasks.mins }}</td>
+            <td>{{ tasks.no_of_records }}</td>
+            <td>{{ tasks.date }}</td>
+            <td>{{ tasks.project_id }}</td>
+            <td>{{ tasks.user_comments }}</td>
+            <td>{{ tasks.status }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    <br>
+    {% endif %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center">
+
+            {% if TeamActivityList.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ TeamActivityList.previous_page_number }}">previous</a></li>
+            {% endif %}
+            {% for num in TeamActivityList.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            {% endfor %}
+            {% if TeamActivityList.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ TeamActivityList.next_page_number }}">next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ TeamActivityList.paginator.num_pages }}">last
+                    &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+<br>
+</div>
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "tascaty/base.html" %}
+{% load static %}
+
+{% block datepickercss %}
+<link rel="stylesheet" href="{% static 'css/jquery-ui.min.css'%}" type="text/css" />
+{% endblock datepickercss %}
+
+{% block content %}
+<div class="container text-center"><h4> Report: Approved Tasks </h4></div>
+<div class="container text-center">
+    From Date <input type="text" id="from_date" placeholder="Select From Date" class="datepicker" autocomplete="off"/>
+    To Date <input type="text" id="to_date" placeholder="Select To Date" class="datepicker" autocomplete="off"/>
+    
+    <button name="report" 
+            data-url="{% url 'team-report-download' %}"
+            onclick="window.location.href=''+$(this).data('url')+ '?fromDate='+$('#from_date').val()+'&toDate='+$('#to_date').val(); "
+    >Download</button>
+     
+</div>
+</br/>
+<script>
+    window.onload = function () {
+         
+    }
+   
+
+</script>
+<script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+{% endblock content %}
+
+{% block datepickerjs %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script>
+    var today = new Date();
+    $(".datepicker").datepicker({
+        endDate: "today",
+        maxDate: today,
+        dateFormat: "yy-mm-dd"
+    });
+</script>
+
+
+<script src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+{% endblock datepickerjs %}
