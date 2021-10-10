@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+    name: tascatyk8s-app-pvc
+    namespace: tascaty-app
+spec:
+    accessModes:
+        - ReadWriteOnce
+    storageClassName: managed-nfs-storage
+    resources:
+        requests:
+            storage: 200Mi

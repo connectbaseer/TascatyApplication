@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tascatyk8s-db-deployment
+  namespace: tascaty-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: tascatyk8sdb
+  template:
+    metadata:
+      labels:
+        component: tascatyk8sdb
+    spec:
+      volumes:
+        - name: tascatyk8s-db-mount
+          persistentVolumeClaim:
+            claimName: tascatyk8s-db-pvc
+      containers:
+        - name: tascatyk8sdb
+          image: mariadb
+          ports:
+            - containerPort: 3360
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: tascatyk8s-db-mount
+              subPath: tascatydb
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: tascaty-db-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-db-config-map
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-db-config-map
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tascaty-db-secret
+                  key: MYSQL_PASSWORD
+      nodeSelector:
+        component: tascaty-db
+
+
+
+

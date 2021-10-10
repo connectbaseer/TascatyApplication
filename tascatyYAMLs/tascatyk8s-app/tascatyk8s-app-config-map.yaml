@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: tascatyk8s-app-configmap
+    namespace: tascaty-app
+data:
+    TASCATY_HOST: tascatyk8s-db-cluster-ip-service.tascaty-db.svc.cluster.local
+    TASCATY_PORT: "3306"
+    TASCATY_DB: tascaty_dev
+    TASCATY_USER: tascaty

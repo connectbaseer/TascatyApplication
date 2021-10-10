@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: tascatyk8s-db-config-map
+    namespace: tascaty-db
+data:
+        MYSQL_DATABASE: tascaty_dev
+        MYSQL_USER: tascaty

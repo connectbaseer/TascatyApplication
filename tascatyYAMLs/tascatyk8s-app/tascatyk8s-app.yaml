@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tascatyk8s-app-deployment
+  namespace: tascaty-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: tascatyk8s-app
+  template:
+    metadata:
+      labels:
+        component: tascatyk8s-app
+    spec:
+      volumes:
+        - name: tascatyk8s-app-mount
+          persistentVolumeClaim:
+            claimName: tascatyk8s-app-pvc
+      imagePullSecrets:
+        - name: tascaty-docker-registry
+      containers:
+        - name: tascatyk8s-app
+          image: abdul8423/tascaty:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - mountPath: /usr/local/lib/python3.8/dist-packages/users/migrations
+              name: tascatyk8s-app-mount
+              subPath: users
+            - mountPath: /usr/local/lib/python3.8/dist-packages/tascaty/migrations
+              name: tascatyk8s-app-mount
+              subPath: tascaty
+            - mountPath: /usr/local/lib/python3.8/dist-packages/leaves/migrations
+              name: tascatyk8s-app-mount
+              subPath: leaves
+            - mountPath: /usr/local/lib/python3.8/dist-packages/blog/migrations
+              name: tascatyk8s-app-mount
+              subPath: blog
+          env:
+            - name: TASCATY_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-app-configmap
+                  key: TASCATY_HOST
+            - name: TASCATY_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-app-configmap
+                  key: TASCATY_PORT
+            - name: TASCATY_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-app-configmap
+                  key: TASCATY_DB
+            - name: TASCATY_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: tascatyk8s-app-configmap
+                  key: TASCATY_USER
+            - name: TASCATY_PASS
+              valueFrom: 
+                secretKeyRef:
+                  name: tascaty-app-secret
+                  key: MYSQL_PASSWORD
+      nodeSelector:
+        component: tascaty-app
+        
+
+
+            

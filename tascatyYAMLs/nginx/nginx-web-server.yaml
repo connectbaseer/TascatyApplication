@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-web-server
+  namespace: web-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: web-server
+  template:
+    metadata:
+      labels:
+        component: web-server
+    spec:
+      containers:
+        - name: nginx-web-server
+          image: abdul8423/tascaty_nginx
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          
+
+
+
+
