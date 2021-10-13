@@ -10,7 +10,7 @@ pipeline {
             steps {
                 git branch: 'main', credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
                 sh "git rev-parse --short HEAD > .git/commit-id"
-                commit_id = readFile('.git/commit-id'.trim())
+                commit_id = readFile('.git/commit-id').trim()
             }
         }
         stage('Build Image') {
