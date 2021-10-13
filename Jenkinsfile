@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        def commit_id
+        commit_id = null
     }
     stages {
 
