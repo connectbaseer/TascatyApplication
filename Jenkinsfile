@@ -12,7 +12,7 @@ pipeline {
 
             steps {
                 sh 'docker version'
-                sh 'docker rmi $(docker images | grep tascaty | tr -s ' ' | cut -d ' ' -f 3)'
+                sh "docker rmi $(docker images | grep tascaty | tr -s ' ' | cut -d ' ' -f 3)"
                 sh 'docker build -t tascaty .'
                 sh 'docker image list'
                 sh 'docker tag tascaty abdul8423/tascaty:V${BUILD_NUMBER}'
