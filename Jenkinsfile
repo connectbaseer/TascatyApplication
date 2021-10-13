@@ -4,24 +4,20 @@ node {
 
                 git branch: 'main', credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
                 sh "git rev-parse --short HEAD > .git/commit-id"
-                commit_id = readFile('.git/commit-id').trim()
-                echo commit_id
-            
+                commit_id = readFile('.git/commit-id').trim()            
         }
         stage('Build Image') {
-                echo commit_id
-                sh 'docker version'
-                sh 'docker build -t tascaty .'
-                sh 'docker image list'
-                sh 'docker tag tascaty abdul8423/tascaty:'${commit_id}
+            def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+            sh 'docker images'
+
         }
-        stage('Push  Image') {
+       /* stage('Push  Image') {
                 withCredentials([string(credentialsId: 'dockerHubPassword', variable: 'Password')]) {
                     sh 'docker login -u abdul8423 -p $Password'
-                    sh 'docker push abdul8423/tascaty:'${commit_id}
+                    sh 'docker push abdul8423/tascaty:${commit_id}'
                 }
         }
-
+*/
       /*  stage('Set New Image') {
 
             steps {
