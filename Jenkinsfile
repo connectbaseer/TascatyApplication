@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(
-                credentialsId: 'tascatyk8s-dev-master',
+                credentialsId: 'tascatyk8s-master',
                 keyFileVariable: 'sshKey',
                 usernameVariable: 'sshUser'
             )]) {
