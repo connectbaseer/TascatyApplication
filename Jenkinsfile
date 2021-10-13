@@ -1,23 +1,15 @@
 node {
        def commit_id
         stage('Clone Repo') {
-
-                git branch: 'main', credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
+                checkout scm
                 sh "git rev-parse --short HEAD > .git/commit-id"
                 commit_id = readFile('.git/commit-id').trim()            
         }
         stage('Build Image') {
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
-            sh 'docker images'
+            customImage.push()
+        }
 
-        }
-       /* stage('Push  Image') {
-                withCredentials([string(credentialsId: 'dockerHubPassword', variable: 'Password')]) {
-                    sh 'docker login -u abdul8423 -p $Password'
-                    sh 'docker push abdul8423/tascaty:${commit_id}'
-                }
-        }
-*/
       /*  stage('Set New Image') {
 
             steps {
