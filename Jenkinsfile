@@ -1,11 +1,16 @@
 pipeline {
     agent any
+    environment {
+        def commit_id
+    }
     stages {
 
         stage('Clone Repo') {
 
             steps {
                 git branch: 'main', credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
+                sh "git rev-parse --short HEAD > .git/commit-id"
+                commit_id = readFile('.git/commit-id'.trim())
             }
         }
         stage('Build Image') {
@@ -14,7 +19,7 @@ pipeline {
                 sh 'docker version'
                 sh 'docker build -t tascaty .'
                 sh 'docker image list'
-                sh 'docker tag tascaty abdul8423/tascaty:V${BUILD_NUMBER}'
+                sh 'docker tag tascaty abdul8423/tascaty:V${commit_id}'
             }
         }
         stage('Push  Image') {
@@ -22,12 +27,12 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'dockerHubPassword', variable: 'Password')]) {
                     sh 'docker login -u abdul8423 -p $Password'
-                    sh 'docker push abdul8423/tascaty:V${BUILD_NUMBER}'
+                    sh 'docker push abdul8423/tascaty:V${commit_id}'
                 }
             }
         }
 
-        stage('Set New Image') {
+      /*  stage('Set New Image') {
 
             steps {
                 script {
@@ -47,7 +52,7 @@ pipeline {
             }
                 }
             }
-        }
+        }*/
 
     }
 }
