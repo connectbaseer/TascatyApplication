@@ -5,7 +5,7 @@ pipeline {
         stage('Clone Repo') {
 
             steps {
-                git credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
+                git branch: '${BRANCH_NAME}', credentialsId: 'gitHubCredentials', url: 'https://github.com/connectbaseer/TascatyApplication.git'
             }
         }
         stage('Build Image') {
