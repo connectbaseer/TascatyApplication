@@ -38,12 +38,12 @@ pipeline {
                 usernameVariable: 'sshUser'
             )]) {
                         def remote = [:]
-                        remote.name = 'tascatyk8s-dev-master'
-                        remote.host = '192.168.50.11'
+                        remote.name = 'tascatyk8s-master'
+                        remote.host = '192.168.30.5'
                         remote.user = sshUser
                         remote.identityFile = sshKey
                         remote.allowAnyHosts = true
-                        env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascatyk8s:V${BUILD_NUMBER} --record=true --namespace=tascaty-app"
+                        env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:V${BUILD_NUMBER} --record=true --namespace=tascaty-app"
                         sshCommand remote: remote, command: "${SET_IMAGE}"
             }
                 }
