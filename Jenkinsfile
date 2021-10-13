@@ -13,12 +13,12 @@ node {
                 sh 'docker version'
                 sh 'docker build -t tascaty .'
                 sh 'docker image list'
-                sh 'docker tag tascaty abdul8423/tascaty:${commit_id}'
+                sh 'docker tag tascaty abdul8423/tascaty:'${commit_id}
         }
         stage('Push  Image') {
                 withCredentials([string(credentialsId: 'dockerHubPassword', variable: 'Password')]) {
                     sh 'docker login -u abdul8423 -p $Password'
-                    sh 'docker push abdul8423/tascaty:${commit_id}'
+                    sh 'docker push abdul8423/tascaty:'${commit_id}
                 }
         }
 
