@@ -11,10 +11,8 @@ node {
         }
 
         stage('Set New Image') {
-
-            steps {
-                script {
-                    withCredentials([sshUserPrivateKey(
+            
+            withCredentials([sshUserPrivateKey(
                 credentialsId: 'tascatyk8s-master',
                 keyFileVariable: 'sshKey',
                 usernameVariable: 'sshUser'
@@ -25,11 +23,8 @@ node {
                         remote.user = sshUser
                         remote.identityFile = sshKey
                         remote.allowAnyHosts = true
-                        env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:V${BUILD_NUMBER} --record=true --namespace=tascaty-app"
+                        env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:${commit_id} --record=true --namespace=tascaty-app"
                         sshCommand remote: remote, command: "${SET_IMAGE}"
             }
-                }
-            }
         }
-
 }
