@@ -10,7 +10,7 @@ node {
             customImage.push()
         }
 
-      /*  stage('Set New Image') {
+        stage('Set New Image') {
 
             steps {
                 script {
@@ -30,6 +30,6 @@ node {
             }
                 }
             }
-        }*/
+        }
 
-    }
+}
