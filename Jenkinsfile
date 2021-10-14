@@ -1,23 +1,13 @@
-node {
-        def commit_id
-        if (env.BRANCH_NAME == 'feature*')
-            stage('Build Docker'){
-                    checkout scm
-                    sh "git rev-parse --short HEAD > .git/commit-id"
-                    commit_id = readFile('.git/commit-id').trim()
-            }
+node{
+    def commit_id
+    if (env.BRANCH_NAME = 'feature'){
+        stage('Build'){
+            checkout scm
+            sh "git rev-parse --short HEAD > .git/commit-id"
+            commit_id = readFile('.git/commit-id').trim()
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 // node {
 //        def commit_id
 //         stage('Clone Repo') {
