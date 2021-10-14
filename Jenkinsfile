@@ -5,6 +5,9 @@ node{
             checkout scm
             sh "git rev-parse --short HEAD > .git/commit-id"
             commit_id = readFile('.git/commit-id').trim()
+        stage('Build Image') {
+            def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+            customImage.push()
         }
     }
 }
