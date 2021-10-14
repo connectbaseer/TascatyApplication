@@ -5,11 +5,16 @@ node {
                 sh "git rev-parse --short HEAD > .git/commit-id"
                 commit_id = readFile('.git/commit-id').trim()            
         }
-        stage('Build Image') {
+
+        node('slave_docker01'){
+
+            stage('Build Image') {
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
             customImage.push()
-        }
+            }
 
+        }
+        
         stage('Set New Image') {
             
             withCredentials([sshUserPrivateKey(
