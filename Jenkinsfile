@@ -1,22 +1,41 @@
 node {
-       def commit_id
 
-        if (env.BRANCH_NAME == 'featur*') {
+    stage('print env') {
+        println "env.BRANCH_NAME: ${env.BRANCH_NAME}"
+        println "env.CHANGE_ID: ${env.CHANGE_ID}"
+		println "env.CHANGE_URL: ${env.CHANGE_URL}"
+		println "env.CHANGE_TITLE: ${env.CHANGE_TITLE}"
+		println "env.CHANGE_AUTHOR: ${env.CHANGE_AUTHOR}"
+		println "env.CHANGE_AUTHOR_DISPLAY_NAME: ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
+		println "env.CHANGE_AUTHOR_EMAIL: ${env.CHANGE_AUTHOR_EMAIL}"
+		println "env.CHANGE_TARGET: ${env.CHANGE_TARGET}"
 
-            stage('Clone Repo') {
 
-                checkout scm
-                sh "git rev-parse --short HEAD > .git/commit-id"
-                commit_id = readFile('.git/commit-id').trim()
-             }
+    }
 
-            stage('Build Image') {
-                def customImage = docker.build("abdul8423/tascaty:${commit_id}")
-                customImage.push()
-            }
-
-        }
 }
+
+
+
+
+
+
+
+
+
+
+// node {
+//        def commit_id
+//         stage('Clone Repo') {
+//                 checkout scm
+//                 sh "git rev-parse --short HEAD > .git/commit-id"
+//                 commit_id = readFile('.git/commit-id').trim()            
+//         }
+//         stage('Build Image') {
+//             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+//             customImage.push()
+//         }
+
 //         stage('Set New Image') {
             
 //             withCredentials([sshUserPrivateKey(
@@ -34,4 +53,4 @@ node {
 //                         sshCommand remote: remote, command: "${SET_IMAGE}"
 //             }
 //         }
-// }
+// }      
