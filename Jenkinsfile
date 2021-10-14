@@ -1,6 +1,6 @@
 node{
     def commit_id
-    if (env.BRANCH_NAME = 'feature'){
+    if (env.BRANCH_NAME == 'feature'){
         stage('Build'){
             checkout scm
             sh "git rev-parse --short HEAD > .git/commit-id"
