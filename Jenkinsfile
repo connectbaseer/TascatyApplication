@@ -1,17 +1,26 @@
 node {
-
-stage('This is Pull Request') {
+        def commit_id
+        stage('Clone Repo') {
 
             if (env.BRANCH_NAME == 'PR*') {
-                echo "this is PR Request"
+                echo "Processing Pull Request"
             } 
-            else {
-                 echo "this is a ${env.BRANCH_NAME} Branch name"
+            if (env.BRANCH_NAME == 'feature*'){
+                 checkout scm
+                 sh "git rev-parse --short HEAD > .git/commit-id"
+                 commit_id = readFile('.git/commit-id').trim() 
             }
-            
         }
 
+        stage('Build Image') {
+            if (env.BRANCH_NAME == 'feature*'){
+                def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+                customImage.push()
+            }
+        }
+            
 }
+
 
 
 
