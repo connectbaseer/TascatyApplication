@@ -6,7 +6,7 @@ node {
                 commit_id = readFile('.git/commit-id').trim()            
         }
 
-        node('slave_docker01'){
+        node('slav01_docker'){
 
             stage('Build Image') {
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
@@ -15,7 +15,7 @@ node {
 
         }
         
-        stage('Set New Image') {
+        /*stage('Set New Image') {
             
             withCredentials([sshUserPrivateKey(
                 credentialsId: 'tascatyk8s-master',
@@ -31,5 +31,5 @@ node {
                         env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:${commit_id} --record=true --namespace=tascaty-app"
                         sshCommand remote: remote, command: "${SET_IMAGE}"
             }
-        }
+        }*/
 }
