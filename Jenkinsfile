@@ -6,16 +6,24 @@ node {
                 commit_id = readFile('.git/commit-id').trim()            
         }
 
-        node('slav01_docker'){
+        stage('Build Image') {
 
-            stage('Build Image') {
-            def customImage = docker.build("abdul8423/tascaty:${commit_id}")
-            customImage.push()
+            def DockerSideCar = docker.image('alpine')
+
+            DockerSideCar.inside {
+                    sh 'apk install docker'
+                    checkout scm
+                    sh "git rev-parse --short HEAD > .git/commit-id"
+                    commit_id = readFile('.git/commit-id').trim() 
+                    def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+                    customImage.push()
+            
+
             }
 
         }
-        
-        /*stage('Set New Image') {
+        /*
+        stage('Set New Image') {
             
             withCredentials([sshUserPrivateKey(
                 credentialsId: 'tascatyk8s-master',
