@@ -13,7 +13,7 @@ node {
 
         stage('This is Feature Branch') {
 
-            echo "this is ${env.BRANCH_NAME} Branch name"
+            echo "this is a ${env.BRANCH_NAME} Branch name"
         }
 
     }
