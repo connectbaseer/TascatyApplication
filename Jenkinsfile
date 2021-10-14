@@ -1,17 +1,24 @@
 node {
 
-    stage('print env') {
-        println "env.BRANCH_NAME: ${env.BRANCH_NAME}"
-        println "env.CHANGE_ID: ${env.CHANGE_ID}"
-		println "env.CHANGE_URL: ${env.CHANGE_URL}"
-		println "env.CHANGE_TITLE: ${env.CHANGE_TITLE}"
-		println "env.CHANGE_AUTHOR: ${env.CHANGE_AUTHOR}"
-		println "env.CHANGE_AUTHOR_DISPLAY_NAME: ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
-		println "env.CHANGE_AUTHOR_EMAIL: ${env.CHANGE_AUTHOR_EMAIL}"
-		println "env.CHANGE_TARGET: ${env.CHANGE_TARGET}"
+    if (env.BRANCH_NAME == PR*) {
 
+        stage('This is Pull Request') {
+
+            echo "this is ${env.BRANCH_NAME} Branch"
+        }
 
     }
+
+    if (env.BRANCH_NAME == feature*) {
+
+        stage('This is Feature Branch') {
+
+            echo "this is ${env.BRANCH_NAME} Branch"
+        }
+
+    }
+   
+   
 
 }
 
