@@ -2,7 +2,12 @@ node {
        def commit_id
 
         if (env.CHANGE_TITLE == 'when-pr') {
-            if (env.BRANCH_NAME == 'feature*')
+
+            echo 'Processing the Pull Request'
+
+        }
+        
+        if (env.BRANCH_NAME == 'feature*') {
 
             stage('Clone Repo') {
 
