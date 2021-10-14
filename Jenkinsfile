@@ -1,28 +1,48 @@
 node {
-       def commit_id
 
-        if (env.CHANGE_TITLE == 'when-pr') {
+    if (env.BRANCH_NAME == PR*) {
 
-            echo 'Processing the Pull Request'
+        stage('This is Pull Request') {
 
+            echo "this is ${env.BRANCH_NAME} Branch"
         }
-        
-        if (env.BRANCH_NAME == 'feature*') {
 
-            stage('Clone Repo') {
+    }
 
-                checkout scm
-                sh "git rev-parse --short HEAD > .git/commit-id"
-                commit_id = readFile('.git/commit-id').trim()
-             }
+    if (env.BRANCH_NAME == feature*) {
 
-            stage('Build Image') {
-                def customImage = docker.build("abdul8423/tascaty:${commit_id}")
-                customImage.push()
-            }
+        stage('This is Feature Branch') {
 
+            echo "this is ${env.BRANCH_NAME} Branch"
         }
+
+    }
+   
+   
+
 }
+
+
+
+
+
+
+
+
+
+
+// node {
+//        def commit_id
+//         stage('Clone Repo') {
+//                 checkout scm
+//                 sh "git rev-parse --short HEAD > .git/commit-id"
+//                 commit_id = readFile('.git/commit-id').trim()            
+//         }
+//         stage('Build Image') {
+//             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+//             customImage.push()
+//         }
+
 //         stage('Set New Image') {
             
 //             withCredentials([sshUserPrivateKey(
@@ -40,4 +60,4 @@ node {
 //                         sshCommand remote: remote, command: "${SET_IMAGE}"
 //             }
 //         }
-// }
+// }      
