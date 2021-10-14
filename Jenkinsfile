@@ -1,6 +1,6 @@
 node {
 
-    if (env.BRANCH_NAME == PR*) {
+    if (env.BRANCH_NAME == 'PR*') {
 
         stage('This is Pull Request') {
 
@@ -9,11 +9,11 @@ node {
 
     }
 
-    if (env.BRANCH_NAME == feature*) {
+    if (env.BRANCH_NAME == 'feature*') {
 
         stage('This is Feature Branch') {
 
-            echo "this is ${env.BRANCH_NAME} Branch name"
+            echo "this is a ${env.BRANCH_NAME} Branch name"
         }
 
     }
