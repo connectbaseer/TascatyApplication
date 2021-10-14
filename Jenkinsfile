@@ -1,24 +1,15 @@
 node {
 
-    if (env.BRANCH_NAME == 'PR*') {
+stage('This is Pull Request') {
 
-        stage('This is Pull Request') {
-
-            echo "this is ${env.BRANCH_NAME} Branch"
+            if (env.BRANCH_NAME == 'PR*') {
+                echo "this is PR Request"
+            } 
+            else {
+                 echo "this is a ${env.BRANCH_NAME} Branch name"
+            }
+            
         }
-
-    }
-
-    if (env.BRANCH_NAME == 'feature*') {
-
-        stage('This is Feature Branch') {
-
-            echo "this is a ${env.BRANCH_NAME} Branch name"
-        }
-
-    }
-   
-   
 
 }
 
