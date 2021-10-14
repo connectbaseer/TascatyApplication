@@ -1,7 +1,7 @@
 node {
         def commit_id
 
-        stage('Build Docker Image'){
+        stage('Build Docker'){
             if (env.BRANCH_NAME == "PR*"){
                 echo 'Processing Pull Request'
             } else if (env.BRANCH_NAME == 'feature*'){
