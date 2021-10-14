@@ -1,26 +1,15 @@
 node {
+        def commit_id
+        stage('Build Docker'){
+      
+                 checkout scm
+                 sh "git rev-parse --short HEAD > .git/commit-id"
+                 commit_id = readFile('.git/commit-id').trim()
+            
 
-    if (env.BRANCH_NAME == PR*) {
-
-        stage('This is Pull Request') {
-
-            echo "this is ${env.BRANCH_NAME} Branch"
         }
-
-    }
-
-    if (env.BRANCH_NAME == feature*) {
-
-        stage('This is Feature Branch') {
-
-            echo "this is ${env.BRANCH_NAME} Branch name"
-        }
-
-    }
-   
-   
-
 }
+
 
 
 
