@@ -7,22 +7,10 @@ node {
         }
 
         stage('Build Image') {
-
-            def DockerSideCar = docker.image('alpine')
-
-            DockerSideCar.inside {
-                    sh 'apk install docker'
-                    checkout scm
-                    sh "git rev-parse --short HEAD > .git/commit-id"
-                    commit_id = readFile('.git/commit-id').trim() 
-                    def customImage = docker.build("abdul8423/tascaty:${commit_id}")
-                    customImage.push()
-            
-
+            def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+            customImage.push()
             }
-
-        }
-        /*
+        
         stage('Set New Image') {
             
             withCredentials([sshUserPrivateKey(
@@ -39,5 +27,5 @@ node {
                         env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:${commit_id} --record=true --namespace=tascaty-app"
                         sshCommand remote: remote, command: "${SET_IMAGE}"
             }
-        }*/
+        }
 }
