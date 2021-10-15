@@ -1,25 +1,17 @@
-node {
-        def commit_id
-        stage('Build Docker'){
-      
-                 checkout scm
-                 sh "git rev-parse --short HEAD > .git/commit-id"
-                 commit_id = readFile('.git/commit-id').trim()
-            
-
+node{
+    def commit_id
+    if (env.BRANCH_NAME == 'feature'){
+        stage('Clone Repo'){
+            checkout scm
+            sh "git rev-parse --short HEAD > .git/commit-id"
+            commit_id = readFile('.git/commit-id').trim()
         }
+        stage('Build Image') {
+            def customImage = docker.build("abdul8423/tascaty:${commit_id}")
+            customImage.push()
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 // node {
 //        def commit_id
 //         stage('Clone Repo') {
