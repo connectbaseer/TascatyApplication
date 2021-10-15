@@ -15,7 +15,7 @@ node{
             commit_id = readFile('.git/commit-id').trim()
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
             customImage.push()
-            sh 'docker system prune --all'
+            sh './build_cleanup.sh'
         }
     }
 }
