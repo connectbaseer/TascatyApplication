@@ -1,14 +1,21 @@
 node{
     def commit_id
     if (env.BRANCH_NAME == 'feature'){
-        stage('Clone Repo'){
+        stage('Check Feature and Test Build'){
+            checkout scm
+            def customImage = docker.build("abdul8423/tascaty")
+        }
+        
+    }
+
+    if (env.BRANCH_NAME == 'develop'){
+        stage('Build And Push') {
             checkout scm
             sh "git rev-parse --short HEAD > .git/commit-id"
             commit_id = readFile('.git/commit-id').trim()
-        }
-        stage('Build Image') {
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
             customImage.push()
+            sh 'docker system prune --all'
         }
     }
 }
