@@ -64,4 +64,8 @@ node{
         }
 
     }
+
+    stage('Clean WS'){
+        deleteDir()
+    }
 }
