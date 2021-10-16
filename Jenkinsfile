@@ -37,5 +37,31 @@ node{
             }
         }
 
+        stage('Test Deployment On Dev Environment') {
+             sh 'curl http://192.168.50.11:32421/ -v'
+        }
+
+        stage('Deploy to Production ?') {
+            input(message: 'Please Confirm to Deploy to Prodection')
+        }
+
+        stage('Set New Image On Production Environment') {
+            
+            withCredentials([sshUserPrivateKey(
+                credentialsId: 'tascatyk8s-master',
+                keyFileVariable: 'sshKey',
+                usernameVariable: 'sshUser'
+            )]) {
+                        def remote = [:]
+                        remote.name = 'tascatyk8s-master'
+                        remote.host = '192.168.30.5'
+                        remote.user = sshUser
+                        remote.identityFile = sshKey
+                        remote.allowAnyHosts = true
+                        env.SET_IMAGE = "kubectl set image deployment/tascatyk8s-app-deployment tascatyk8s-app=abdul8423/tascaty:${commit_id} --record=true --namespace=tascaty-app"
+                        sshCommand remote: remote, command: "${SET_IMAGE}"
+            }
+        }
+
     }
 }
