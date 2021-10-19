@@ -64,7 +64,7 @@ node{
 
     }
 
-    if (BRANCH_NAME == 'feature' or BRANCH_NAME = 'develop'){
+    if (BRANCH_NAME == 'feature' || BRANCH_NAME = 'develop'){
         stage('Clean WS'){
         sh './build_cleanup.sh'
         deleteDir()
