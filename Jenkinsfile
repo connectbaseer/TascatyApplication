@@ -65,7 +65,7 @@ node{
     }
 
     stage('Clean WS'){
-        deleteDir()
         sh './build_cleanup.sh'
+        deleteDir()
     }
 }
