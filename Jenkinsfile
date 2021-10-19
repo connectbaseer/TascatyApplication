@@ -4,7 +4,7 @@ node{
         stage('Check Feature and Test Build'){
             checkout scm
             def customImage = docker.build("abdul8423/tascaty")
-            sh './build_cleanup.sh'
+            
         }
         
     }
@@ -16,7 +16,6 @@ node{
             commit_id = readFile('.git/commit-id').trim()
             def customImage = docker.build("abdul8423/tascaty:${commit_id}")
             customImage.push()
-            sh './build_cleanup.sh'
         }
 
         stage('Set New Image On Dev Environment') {
@@ -65,7 +64,11 @@ node{
 
     }
 
-    stage('Clean WS'){
-        deleteDir()
+    if (BRANCH_NAME == 'feature' || BRANCH_NAME == 'develop'){
+        stage('Clean WS'){
+            sh './build_cleanup.sh'
+            deleteDir()
+        }
     }
+    
 }
